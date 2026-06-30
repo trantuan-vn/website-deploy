@@ -63,7 +63,11 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 # Remove this line if you do not have this folder
-COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+
+# Payload writes uploaded media (including the seed script) to public/media at
+# runtime, so the directory must exist and be writable by the `nextjs` user.
+RUN mkdir -p ./public/media && chown -R nextjs:nodejs ./public
 
 # Set the correct permission for prerender cache
 RUN mkdir .next
