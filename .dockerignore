@@ -1,0 +1,15 @@
+Dockerfile
+.dockerignore
+node_modules
+npm-debug.log
+.next
+.git
+.gitignore
+.env
+README.md
+.vscode
+test-results
+playwright-report
+blob-report
+playwright/.cache
+**/.DS_Store

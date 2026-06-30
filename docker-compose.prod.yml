@@ -1,0 +1,27 @@
+name: website-deploy
+
+services:
+  payload:
+    image: website-deploy:latest
+    restart: unless-stopped
+    ports:
+      - '3001:3000'
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:latest
+    restart: unless-stopped
+    command:
+      - --storageEngine=wiredTiger
+    ports:
+      # Published to the host so the production image can be built against it
+      # (the legacy Docker builder cannot resolve compose service names).
+      - '27017:27017'
+    volumes:
+      - data:/data/db
+
+volumes:
+  data:
