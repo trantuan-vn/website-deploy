@@ -1,0 +1,33 @@
+# giải pháp
+https://docs.oracle.com/en/solutions/deploy-oke-with-bastion-and-github/index.html#GUID-88DB2E49-F3FD-4BC9-993A-1B9F92835CB0
+
+# set quyen file chay
+chmod +x setup-bastion.sh connect-oke.sh
+
+# Lần đầu (tạo bastion + session + tunnel)
+./setup-bastion.sh
+
+# Kết nối lại (bastion đã có, tạo session mới + tunnel)
+./connect-oke.sh
+
+# Lỗi thường gặp
+
+## connection refused 127.0.0.1:6443
+# Nguyên nhân: SSH tunnel bị suspend hoặc chưa chạy
+#   -> Dùng connect-oke.sh (redirect stdio + ssh -f)
+
+## TLS handshake timeout (tunnel PID có nhưng kubectl fail)
+# Nguyên nhân: Bastion đặt trong subnet API (/28) nhưng security list thiếu egress TCP/6443
+#   tới API subnet. SSH tunnel mở port local OK nhưng không forward được tới API.
+# Giải pháp 1 (khuyến nghị): setup-bastion.sh đặt bastion trong oke-nodesubnet
+# Giải pháp 2: connect-oke.sh tự thêm egress rule nếu bastion vẫn ở API subnet
+# Giải pháp 3: Xóa bastion cũ, chạy lại ./setup-bastion.sh
+
+# Để dừng tunnel:
+kill <PID> hoặc pkill -f "ssh.*bastion"
+
+# Xóa session
+oci bastion session delete --session-id $SESSION_ID --force
+
+# Xóa Bastion
+oci bastion bastion delete --bastion-id $BASTION_ID --force
