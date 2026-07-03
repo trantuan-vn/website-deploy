@@ -72,7 +72,9 @@ export const Posts: CollectionConfig = {
     {
       name: 'title',
       type: 'text',
+      label: 'Tiêu đề',
       required: true,
+      localized: true,
     },
     {
       type: 'tabs',
@@ -87,6 +89,7 @@ export const Posts: CollectionConfig = {
             {
               name: 'content',
               type: 'richText',
+              localized: true,
               editor: lexicalEditor({
                 features: ({ rootFeatures }) => {
                   return [
@@ -138,6 +141,7 @@ export const Posts: CollectionConfig = {
         {
           name: 'meta',
           label: 'SEO',
+          localized: true,
           fields: [
             OverviewField({
               titlePath: 'meta.title',
@@ -217,7 +221,7 @@ export const Posts: CollectionConfig = {
         },
       ],
     },
-    slugField(),
+    slugField({ localized: true }),
   ],
   hooks: {
     afterChange: [revalidatePost],

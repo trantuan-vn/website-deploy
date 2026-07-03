@@ -38,6 +38,9 @@ importers:
       '@payloadcms/richtext-lexical':
         specifier: 4.0.0-canary.3
         version: 4.0.0-canary.3(@faceless-ui/modal@3.0.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@faceless-ui/scroll-info@2.0.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@payloadcms/next@4.0.0-canary.3(@types/react@19.2.14)(graphql@16.14.2)(monaco-editor@0.55.1)(next@16.2.7(@babel/core@7.29.7)(@playwright/test@1.59.1)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(sass@1.77.4))(payload@4.0.0-canary.3(graphql@16.14.2)(typescript@6.0.3))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@6.0.3))(@types/react@19.2.14)(monaco-editor@0.55.1)(payload@4.0.0-canary.3(graphql@16.14.2)(typescript@6.0.3))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@6.0.3)(yjs@13.6.31)
+      '@payloadcms/translations':
+        specifier: 4.0.0-canary.3
+        version: 4.0.0-canary.3
       '@payloadcms/ui':
         specifier: 4.0.0-canary.3
         version: 4.0.0-canary.3(@types/react@19.2.14)(monaco-editor@0.55.1)(payload@4.0.0-canary.3(graphql@16.14.2)(typescript@6.0.3))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@6.0.3)

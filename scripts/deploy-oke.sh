@@ -33,7 +33,6 @@ INGRESS_MANIFEST="https://raw.githubusercontent.com/kubernetes/ingress-nginx/con
 OCIR_REGION="${OCIR_REGION:-ap-singapore-1}"
 DOMAIN="${DOMAIN:-vccp.vn}"
 NEXT_PUBLIC_SERVER_URL="${NEXT_PUBLIC_SERVER_URL:-https://vccp.vn}"
-IMAGE_TAG="${IMAGE_TAG:-v1.0.0}"
 ORIGIN_CERT="${ORIGIN_CERT:-origin.pem}"
 ORIGIN_KEY="${ORIGIN_KEY:-origin.key}"
 DEPLOY_MONGO="${DEPLOY_MONGO:-true}"
@@ -113,6 +112,8 @@ require_cmd() {
 
 load_env() {
   local env_file="$REPO_ROOT/production.env"
+  # Giữ IMAGE_TAG từ CLI (vd. IMAGE_TAG=v1.0.2 ./scripts/redeploy-oke.sh)
+  local cli_image_tag="${IMAGE_TAG:-}"
 
   # Đọc giá trị từ .env không qua shell expansion (tránh ; [ ] $ … làm hỏng token)
   env_file_val() {
@@ -136,6 +137,11 @@ load_env() {
     log_warn "Không tìm thấy production.env — dùng biến môi trường hoặc default"
     log_warn "Tạo file: cp scripts/deploy-oke.env.example production.env"
   fi
+
+  if [[ -n "$cli_image_tag" ]]; then
+    IMAGE_TAG="$cli_image_tag"
+  fi
+  IMAGE_TAG="${IMAGE_TAG:-v1.0.0}"
 
   : "${OCIR_TENANCY_NAMESPACE:?Set OCIR_TENANCY_NAMESPACE in production.env}"
   : "${OCIR_USERNAME:?Set OCIR_USERNAME in production.env}"
@@ -439,6 +445,11 @@ EOF
   run kubectl apply -f "$tmpdir/deployment.yaml"
 
   run kubectl apply -f "$K8S_DIR/service.yaml"
+
+  if [[ "$SKIP_BUILD" != true && "$DRY_RUN" != true ]]; then
+    log_ok "Khởi động lại pod để dùng image mới..."
+    kubectl rollout restart deployment/website-deploy -n website
+  fi
 
   log_ok "Đợi deployment rollout..."
   if [[ "$DRY_RUN" != true ]]; then

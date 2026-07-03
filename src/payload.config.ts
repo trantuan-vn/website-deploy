@@ -1,3 +1,5 @@
+import { en } from '@payloadcms/translations/languages/en'
+import { vi } from '@payloadcms/translations/languages/vi'
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
 import sharp from 'sharp'
 import path from 'path'
@@ -60,6 +62,18 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URL,
   }),
+  localization: {
+    locales: [
+      { label: 'Tiếng Việt', code: 'vi' },
+      { label: 'English', code: 'en' },
+    ],
+    defaultLocale: 'vi',
+    fallback: true, // nếu locale hiện tại chưa có bản dịch, fallback về defaultLocale
+  },  
+  i18n: {
+    supportedLanguages: { en, vi },
+    fallbackLanguage: 'vi',
+  },
   collections: [
     {
       slug: 'folders',
