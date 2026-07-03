@@ -10,9 +10,10 @@ tsconfig.tsbuildinfo
 
 # Payload default media upload directory
 public/media/
-
-public/robots.txt
-public/sitemap*.xml
+k8s/secret.yaml
+production.env
+origin.pem
+origin.key
 
 
 # Playwright

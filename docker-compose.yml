@@ -16,15 +16,11 @@ services:
       - .env
 
   mongo:
-    image: mongo:latest
+    image: docker.io/library/mongo:7
     ports:
       - '27017:27017'
-    command:
-      - --storageEngine=wiredTiger
     volumes:
       - data:/data/db
-    logging:
-      driver: none
 
 volumes:
   data:

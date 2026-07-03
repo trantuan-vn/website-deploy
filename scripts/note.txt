@@ -1,0 +1,5 @@
+# Tắt
+oci ce node-pool update --node-pool-id <id> --size 0
+
+# Bật lại
+oci ce node-pool update --node-pool-id <id> --size 1

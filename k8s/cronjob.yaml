@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: payload-cron
+  namespace: website
+spec:
+  schedule: "*/5 * * * *"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: curl
+              image: docker.io/curlimages/curl:8.5.0
+              env:
+                - name: CRON_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: website-secrets
+                      key: CRON_SECRET
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  curl -fsS \
+                    -H "Authorization: Bearer ${CRON_SECRET}" \
+                    "http://website-deploy.website.svc.cluster.local/api/payload-jobs/run"

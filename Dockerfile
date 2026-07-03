@@ -41,10 +41,9 @@ ENV NEXT_PUBLIC_SERVER_URL=${NEXT_PUBLIC_SERVER_URL}
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
-# --network=host lets the build reach the database (the website template queries
-# the DB during static generation). Build with a buildx builder attached to the
-# DB network and pass `--allow network.host`.
-RUN --network=host \
+# Reach Mongo from the build container via host.docker.internal (Mac/Win Docker Desktop)
+# or host port-forward: kubectl port-forward -n website svc/mongo 27017:27017
+RUN \
   if [ -f yarn.lock ]; then yarn run build; \
   elif [ -f package-lock.json ]; then npm run build; \
   elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
@@ -55,7 +54,7 @@ RUN --network=host \
 FROM base AS runner
 WORKDIR /app
 
-ENV NODE_ENV production
+ENV NODE_ENV=production
 # Uncomment the following line in case you want to disable telemetry during runtime.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
@@ -82,8 +81,8 @@ USER nextjs
 
 EXPOSE 3000
 
-ENV PORT 3000
+ENV PORT=3000
 
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
-CMD HOSTNAME="0.0.0.0" node server.js
+CMD ["sh", "-c", "HOSTNAME=0.0.0.0 node server.js"]
