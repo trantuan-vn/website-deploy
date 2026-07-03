@@ -1,6 +1,6 @@
-# Hướng dẫn triển khai production trên OKE (OCI) và trỏ domain vcpp.vn qua Cloudflare
+# Hướng dẫn triển khai production trên OKE (OCI) và trỏ domain vccp.vn qua Cloudflare
 
-Tài liệu này mô tả **từng bước** triển khai ứng dụng **website-deploy** (Payload CMS + Next.js) lên **Oracle Kubernetes Engine (OKE)** và cấu hình domain **vcpp.vn** trên **Cloudflare**.
+Tài liệu này mô tả **từng bước** triển khai ứng dụng **website-deploy** (Payload CMS + Next.js) lên **Oracle Kubernetes Engine (OKE)** và cấu hình domain **vccp.vn** trên **Cloudflare**.
 
 > **Khuyến nghị:** Dùng script tự động [`scripts/deploy-oke.sh`](../scripts/deploy-oke.sh) để chạy các bước 3–11 theo đúng thứ tự. Các mục dưới giải thích chi tiết từng bước khi cần làm thủ công hoặc debug.
 
@@ -19,7 +19,7 @@ Tài liệu này mô tả **từng bước** triển khai ứng dụng **website
 7. [Triển khai ứng dụng lên Kubernetes](#7-triển-khai-ứng-dụng-lên-kubernetes)
 8. [Cấu hình TLS cho origin (Full strict)](#8-cấu-hình-tls-cho-origin-full-strict)
 9. [Lấy public IP của Load Balancer](#9-lấy-public-ip-của-load-balancer)
-10. [Cấu hình Cloudflare DNS cho vcpp.vn](#10-cấu-hình-cloudflare-dns-cho-vcppvn)
+10. [Cấu hình Cloudflare DNS cho vccp.vn](#10-cấu-hình-cloudflare-dns-cho-vcppvn)
 11. [Cấu hình Cloudflare SSL, Cache và WebSocket](#11-cấu-hình-cloudflare-ssl-cache-và-websocket)
 12. [Cập nhật biến môi trường production](#12-cập-nhật-biến-môi-trường-production)
 13. [Kiểm tra sau triển khai](#13-kiểm-tra-sau-triển-khai)
@@ -38,7 +38,7 @@ Người dùng
     │
     ▼
 Cloudflare (DNS + CDN + TLS edge)
-    │  https://vcpp.vn
+    │  https://vccp.vn
     ▼
 OCI Load Balancer (public IP)
     │
@@ -85,7 +85,7 @@ Theo cấu hình trong `scripts/bastion/`:
 | Region | `ap-singapore-1` |
 | Compartment | `tuanta2021` |
 | Cluster OKE | Private API endpoint |
-| Domain production | `vcpp.vn` |
+| Domain production | `vccp.vn` |
 
 ### 2.3 Quyền IAM tối thiểu
 
@@ -96,7 +96,7 @@ Theo cấu hình trong `scripts/bastion/`:
 
 ### 2.4 Cloudflare
 
-- Domain `vcpp.vn` đã add vào Cloudflare
+- Domain `vccp.vn` đã add vào Cloudflare
 - Nameserver của domain trỏ về Cloudflare
 
 ### 2.5 Biến môi trường cần chuẩn bị
@@ -118,7 +118,7 @@ File `production.env` (repo root) gồm:
 | `DATABASE_URL` | Connection string MongoDB |
 | `PAYLOAD_SECRET` | Random, ≥ 32 ký tự |
 | `CRON_SECRET`, `PREVIEW_SECRET` | Random secrets |
-| `NEXT_PUBLIC_SERVER_URL` | `https://vcpp.vn` — không có dấu `/` ở cuối |
+| `NEXT_PUBLIC_SERVER_URL` | `https://vccp.vn` — không có dấu `/` ở cuối |
 | `BUILD_DATABASE_URL` | Mongo reachable lúc `docker build` |
 | `ORIGIN_CERT`, `ORIGIN_KEY` | Đường dẫn Cloudflare Origin Certificate |
 
@@ -134,7 +134,7 @@ CRON_SECRET=<random-secret>
 PREVIEW_SECRET=<random-secret>
 
 # Domain production — không có dấu / ở cuối
-NEXT_PUBLIC_SERVER_URL=https://vcpp.vn
+NEXT_PUBLIC_SERVER_URL=https://vccp.vn
 ```
 
 Xem đầy đủ trong [`scripts/deploy-oke.env.example`](../scripts/deploy-oke.env.example).
@@ -213,11 +213,11 @@ IMAGE_TAG=v1.0.2 ./scripts/redeploy-oke.sh
 
 Script **không** tự cấu hình Cloudflare. Làm tiếp trên dashboard:
 
-1. **DNS:** A `@` → EXTERNAL-IP (Proxied); CNAME `www` → `vcpp.vn`
+1. **DNS:** A `@` → EXTERNAL-IP (Proxied); CNAME `www` → `vccp.vn`
 2. **SSL/TLS:** Full (strict), Always Use HTTPS
 3. **Cache Rules:** bypass `/admin`, `/api/`; cache `/_next/static/`
 4. **Network:** WebSockets On
-5. **Redirect:** `www.vcpp.vn` → `https://vcpp.vn${uri.path}` (301)
+5. **Redirect:** `www.vccp.vn` → `https://vccp.vn${uri.path}` (301)
 
 Chi tiết từng mục: [10](#10-cấu-hình-cloudflare-dns-cho-vcppvn), [11](#11-cấu-hình-cloudflare-ssl-cache-và-websocket).
 
@@ -422,7 +422,7 @@ cd /path/to/website-deploy
 docker build \
   --build-arg DATABASE_URL="mongodb://host.docker.internal:27017/website-deploy" \
   --build-arg PAYLOAD_SECRET="build-time-secret-min-32-chars" \
-  --build-arg NEXT_PUBLIC_SERVER_URL="https://vcpp.vn" \
+  --build-arg NEXT_PUBLIC_SERVER_URL="https://vccp.vn" \
   -t ap-singapore-1.ocir.io/<tenancy-namespace>/website-deploy:v1.0.0 \
   .
 ```
@@ -454,7 +454,7 @@ kubectl create secret docker-registry ocir-secret \
 
 ### 5.6 Workflow: Sửa code và deploy lại
 
-Phần này mô tả **quy trình đầy đủ** mỗi khi bạn sửa code trong repo và muốn production (`https://vcpp.vn`) chạy bản mới.
+Phần này mô tả **quy trình đầy đủ** mỗi khi bạn sửa code trong repo và muốn production (`https://vccp.vn`) chạy bản mới.
 
 #### Tại sao cần build lại image?
 
@@ -652,15 +652,15 @@ kubectl get deployment website-deploy -n website -o jsonpath='{.spec.template.sp
 kubectl logs -n website -l app=website-deploy --tail=50 -f
 
 # HTTP từ bên ngoài
-curl -I https://vcpp.vn
-curl -I https://vcpp.vn/admin
+curl -I https://vccp.vn
+curl -I https://vccp.vn/admin
 ```
 
 Checklist nhanh:
 
 - [ ] `kubectl rollout status` → `successfully rolled out`
 - [ ] Image trên deployment khớp `IMAGE_TAG` mới
-- [ ] `https://vcpp.vn` load được, thay đổi code đã hiện
+- [ ] `https://vccp.vn` load được, thay đổi code đã hiện
 - [ ] `/admin` đăng nhập OK
 - [ ] Upload media vẫn hoạt động (PVC không bị xóa khi redeploy)
 
@@ -699,8 +699,8 @@ OCIR_EMAIL=your@email.com
 IMAGE_TAG=v1.0.2                    # ← tăng mỗi lần deploy
 
 # Domain
-DOMAIN=vcpp.vn
-NEXT_PUBLIC_SERVER_URL=https://vcpp.vn
+DOMAIN=vccp.vn
+NEXT_PUBLIC_SERVER_URL=https://vccp.vn
 
 # Runtime (trên K8s)
 DATABASE_URL=mongodb://mongo.website.svc.cluster.local:27017/website-deploy
@@ -811,7 +811,7 @@ metadata:
   name: website-config
   namespace: website
 data:
-  NEXT_PUBLIC_SERVER_URL: "https://vcpp.vn"
+  NEXT_PUBLIC_SERVER_URL: "https://vccp.vn"
 ```
 
 ```bash
@@ -978,11 +978,11 @@ Cloudflare ở chế độ **Full (strict)** yêu cầu origin (OCI LB) có cert
 
 ### 8.1 Tạo Cloudflare Origin Certificate
 
-1. Cloudflare Dashboard → chọn zone **vcpp.vn**
+1. Cloudflare Dashboard → chọn zone **vccp.vn**
 2. **SSL/TLS** → **Origin Server** → **Create Certificate**
 3. Hostnames:
-   - `vcpp.vn`
-   - `*.vcpp.vn`
+   - `vccp.vn`
+   - `*.vccp.vn`
 4. Validity: 15 years (mặc định)
 5. Download:
    - `origin.pem` (certificate)
@@ -1020,7 +1020,7 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - ${DOMAIN}          # script thay bằng vcpp.vn
+        - ${DOMAIN}          # script thay bằng vccp.vn
         - www.${DOMAIN}
       secretName: website-tls
   rules:
@@ -1070,9 +1070,9 @@ kubectl get ingress -n website website-ingress
 
 ---
 
-## 10. Cấu hình Cloudflare DNS cho vcpp.vn
+## 10. Cấu hình Cloudflare DNS cho vccp.vn
 
-Cloudflare Dashboard → **vcpp.vn** → **DNS** → **Records**.
+Cloudflare Dashboard → **vccp.vn** → **DNS** → **Records**.
 
 ### 10.1 Bản ghi apex (bắt buộc)
 
@@ -1084,18 +1084,18 @@ Cloudflare Dashboard → **vcpp.vn** → **DNS** → **Records**.
 
 | Type | Name | Content | Proxy status |
 |------|------|---------|--------------|
-| **CNAME** | `www` | `vcpp.vn` | **Proxied** |
+| **CNAME** | `www` | `vccp.vn` | **Proxied** |
 
 ### 10.3 Redirect www → apex
 
 Cloudflare → **Rules** → **Redirect Rules** → Create rule:
 
-- **If:** Hostname equals `www.vcpp.vn`
-- **Then:** Dynamic redirect → `https://vcpp.vn${uri.path}` — Status **301**
+- **If:** Hostname equals `www.vccp.vn`
+- **Then:** Dynamic redirect → `https://vccp.vn${uri.path}` — Status **301**
 
 ### 10.4 Lưu ý khi Proxied
 
-- `dig vcpp.vn` sẽ trả về **IP Cloudflare**, không phải IP OCI — điều này **bình thường**
+- `dig vccp.vn` sẽ trả về **IP Cloudflare**, không phải IP OCI — điều này **bình thường**
 - Traffic: User → Cloudflare → OCI Load Balancer → Pod
 
 ---
@@ -1153,7 +1153,7 @@ Cloudflare → **Network** → **WebSockets**: **On**
 Sau khi domain hoạt động, đảm bảo:
 
 ```bash
-NEXT_PUBLIC_SERVER_URL=https://vcpp.vn
+NEXT_PUBLIC_SERVER_URL=https://vccp.vn
 ```
 
 ### 12.1 Cập nhật ConfigMap và rollout
@@ -1175,7 +1175,7 @@ IMAGE_TAG=v1.0.1 ./scripts/deploy-oke.sh \
 Hoặc build thủ công:
 
 ```bash
---build-arg NEXT_PUBLIC_SERVER_URL="https://vcpp.vn"
+--build-arg NEXT_PUBLIC_SERVER_URL="https://vccp.vn"
 ```
 
 Rồi push tag mới và cập nhật deployment (script làm tự động khi `IMAGE_TAG` thay đổi).
@@ -1186,11 +1186,11 @@ Rồi push tag mới và cập nhật deployment (script làm tự động khi `
 
 ### 13.1 Checklist
 
-- [ ] `https://vcpp.vn` mở được, certificate hợp lệ
-- [ ] `https://vcpp.vn/admin` — đăng nhập được
+- [ ] `https://vccp.vn` mở được, certificate hợp lệ
+- [ ] `https://vccp.vn/admin` — đăng nhập được
 - [ ] Tạo/sửa bài viết, publish OK
 - [ ] Upload ảnh media hiển thị đúng
-- [ ] `www.vcpp.vn` redirect về `vcpp.vn`
+- [ ] `www.vccp.vn` redirect về `vccp.vn`
 - [ ] Không có mixed content (http asset trên trang https)
 - [ ] Pod `Running`, PVC `Bound`
 
@@ -1198,7 +1198,7 @@ Rồi push tag mới và cập nhật deployment (script làm tự động khi `
 
 ```bash
 # HTTPS header
-curl -I https://vcpp.vn
+curl -I https://vccp.vn
 
 # Pod logs
 kubectl logs -n website -l app=website-deploy --tail=100
@@ -1209,7 +1209,7 @@ kubectl describe ingress -n website website-ingress
 
 ### 13.3 Tạo admin user lần đầu
 
-Truy cập `https://vcpp.vn/admin` — Payload sẽ hướng dẫn tạo user đầu tiên nếu database trống.
+Truy cập `https://vccp.vn/admin` — Payload sẽ hướng dẫn tạo user đầu tiên nếu database trống.
 
 > **Không** chạy seed production trừ khi chấp nhận xóa toàn bộ dữ liệu (seed destructive).
 
@@ -1247,7 +1247,7 @@ spec:
                 - |
                   curl -fsS -X POST \
                     -H "Authorization: Bearer ${CRON_SECRET}" \
-                    "https://vcpp.vn/api/payload-jobs/run"
+                    "https://vccp.vn/api/payload-jobs/run"
 ```
 
 ```bash
@@ -1309,10 +1309,10 @@ Chỉ cho phép pod app kết nối Mongo port 27017.
 |-------------|-------------------|------------|
 | Redirect loop | SSL mode **Flexible** | Đổi **Full (strict)** + origin cert |
 | Cloudflare **522** | LB/pod không phản hồi | `kubectl get pods`, kiểm tra health check LB |
-| Cloudflare **525** SSL handshake | Origin cert sai hostname | Tạo lại origin cert cho `vcpp.vn` |
+| Cloudflare **525** SSL handshake | Origin cert sai hostname | Tạo lại origin cert cho `vccp.vn` |
 | Admin load, API lỗi | Cache Cloudflare | Bypass cache `/admin`, `/api/` |
 | Ảnh upload mất sau restart | Không có PVC | Kiểm tra `website-media-pvc` mounted |
-| CORS / link sai | `NEXT_PUBLIC_SERVER_URL` sai | Set `https://vcpp.vn`, rebuild nếu cần |
+| CORS / link sai | `NEXT_PUBLIC_SERVER_URL` sai | Set `https://vccp.vn`, rebuild nếu cần |
 | `ImagePullBackOff` | OCIR auth sai | Kiểm tra `ocir-secret` |
 | `kubectl` timeout | SSH tunnel chết | `./connect-oke.sh` |
 | Build Docker fail DB | Mongo không reach được lúc build | Chạy Mongo trước, dùng `--network host` |
@@ -1403,5 +1403,5 @@ kubectl rollout undo deployment/website-deploy -n website
 3.  Lấy EXTERNAL-IP của LB (script in ra ở bước 9)
 4.  Cloudflare DNS: A @ → IP (Proxied)
 5.  Cloudflare SSL: Full (strict) + Cache Rules
-6.  Kiểm tra https://vcpp.vn và /admin
+6.  Kiểm tra https://vccp.vn và /admin
 ```

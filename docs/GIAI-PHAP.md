@@ -17,7 +17,7 @@ Tài liệu mô tả **tổng quan giải pháp** của repository `website-depl
 | **Database** | MongoDB | Lưu trữ nội dung, người dùng, metadata |
 | **Hạ tầng** | Oracle Kubernetes Engine (OKE) + Cloudflare | Chạy container, CDN, DNS, bảo mật edge |
 
-Domain production mặc định: **vcpp.vn**.
+Domain production mặc định: **vccp.vn**.
 
 ---
 
@@ -29,7 +29,7 @@ Domain production mặc định: **vcpp.vn**.
 └───────────────┬─────────────────────────────┬───────────────────┘
                 │                             │
                 ▼                             ▼
-        https://vcpp.vn              /admin (Payload)
+        https://vccp.vn              /admin (Payload)
                 │                             │
                 ▼                             │
 ┌───────────────────────────┐                 │
@@ -241,7 +241,7 @@ website-deploy/
 |------|----------|
 | `DATABASE_URL` | Connection string MongoDB |
 | `PAYLOAD_SECRET` | Mã hóa JWT, session (≥ 32 ký tự) |
-| `NEXT_PUBLIC_SERVER_URL` | URL công khai, không có `/` cuối (vd. `https://vcpp.vn`) |
+| `NEXT_PUBLIC_SERVER_URL` | URL công khai, không có `/` cuối (vd. `https://vccp.vn`) |
 | `CRON_SECRET` | Xác thực CronJob gọi jobs API |
 | `PREVIEW_SECRET` | Xác thực draft preview |
 

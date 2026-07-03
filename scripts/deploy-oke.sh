@@ -31,8 +31,8 @@ INGRESS_MANIFEST="https://raw.githubusercontent.com/kubernetes/ingress-nginx/con
 
 # --- defaults (override via production.env) ---
 OCIR_REGION="${OCIR_REGION:-ap-singapore-1}"
-DOMAIN="${DOMAIN:-vcpp.vn}"
-NEXT_PUBLIC_SERVER_URL="${NEXT_PUBLIC_SERVER_URL:-https://vcpp.vn}"
+DOMAIN="${DOMAIN:-vccp.vn}"
+NEXT_PUBLIC_SERVER_URL="${NEXT_PUBLIC_SERVER_URL:-https://vccp.vn}"
 IMAGE_TAG="${IMAGE_TAG:-v1.0.0}"
 ORIGIN_CERT="${ORIGIN_CERT:-origin.pem}"
 ORIGIN_KEY="${ORIGIN_KEY:-origin.key}"

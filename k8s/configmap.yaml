@@ -4,4 +4,4 @@ metadata:
   name: website-config
   namespace: website
 data:
-  NEXT_PUBLIC_SERVER_URL: "https://vcpp.vn"
+  NEXT_PUBLIC_SERVER_URL: "https://vccp.vn"
