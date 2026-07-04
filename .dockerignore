@@ -1,11 +1,14 @@
 Dockerfile
 .dockerignore
 node_modules
+.pnpm-store
 npm-debug.log
 .next
 .git
 .gitignore
 .env
+.env.*
+production.env
 README.md
 .vscode
 test-results
@@ -13,3 +16,11 @@ playwright-report
 blob-report
 playwright/.cache
 **/.DS_Store
+dist
+media
+public/media
+k8s/secret.yaml
+origin.pem
+origin.key
+tsconfig.tsbuildinfo
+.vercel

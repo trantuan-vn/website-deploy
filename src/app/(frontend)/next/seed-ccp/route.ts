@@ -1,4 +1,5 @@
 import { createLocalReq, getPayload } from 'payload'
+import { revalidateTag } from 'next/cache'
 import { seedCcp } from '@/endpoints/seed-ccp'
 import config from '@payload-config'
 import { headers } from 'next/headers'
@@ -18,6 +19,10 @@ export async function POST(): Promise<Response> {
   try {
     const payloadReq = await createLocalReq({ user }, payload)
     await seedCcp({ payload, req: payloadReq })
+
+    revalidateTag('global_header', 'max')
+    revalidateTag('global_footer', 'max')
+
     return Response.json({ success: true })
   } catch (e) {
     payload.logger.error({ err: e, message: 'Error seeding CCP data' })

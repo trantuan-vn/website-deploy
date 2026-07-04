@@ -302,16 +302,16 @@ export const seedCcp = async ({
 
   payload.logger.info('— Seeding globals...')
 
+  // Do not pass disableRevalidate here — header/footer are read via unstable_cache on the
+  // frontend and must trigger revalidateTag after seed (especially in production on OKE).
   await Promise.all([
     payload.updateGlobal({
       slug: 'header',
       data: headerNav(pageIds),
-      context: pageContext,
     }),
     payload.updateGlobal({
       slug: 'footer',
       data: footerNav(pageIds),
-      context: pageContext,
     }),
   ])
 
