@@ -218,6 +218,20 @@ html {
   opacity: 0;
 }
 
+.logo-theme-dark {
+  display: none;
+}
+
+html[data-theme='dark'] .logo-theme-light,
+[data-theme='dark'] .logo-theme-light {
+  display: none;
+}
+
+html[data-theme='dark'] .logo-theme-dark,
+[data-theme='dark'] .logo-theme-dark {
+  display: block;
+}
+
 html[data-theme='dark'],
 html[data-theme='light'] {
   opacity: initial;

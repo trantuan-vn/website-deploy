@@ -1,9 +1,9 @@
-import type { CollectionSlug, GlobalSlug, Payload, PayloadRequest, RequiredDataFromCollectionSlug } from 'payload'
+import type { CollectionSlug, Payload, PayloadRequest, RequiredDataFromCollectionSlug } from 'payload'
 import type { Post } from '@/payload-types'
 
 import { CCP_CATEGORIES } from './categories'
 import { memberContactForm } from './form-member-contact'
-import { footerNav } from './globals/footer'
+import { footerContactEn, footerContactVi, footerNav } from './globals/footer'
 import { headerNav } from './globals/header'
 import { fetchFileByURL, IMAGE_URLS, MEDIA_ALT } from './images'
 import {
@@ -44,8 +44,6 @@ const collections: CollectionSlug[] = [
   'search',
 ]
 
-const globals: GlobalSlug[] = ['header', 'footer']
-
 const DEMO_AUTHOR_EMAIL = 'ccp-admin@vsd.vn'
 
 export const seedCcp = async ({
@@ -59,16 +57,20 @@ export const seedCcp = async ({
 
   payload.logger.info('— Clearing collections and globals...')
 
-  await Promise.all(
-    globals.map((global) =>
-      payload.updateGlobal({
-        slug: global,
-        data: { navItems: [] },
-        depth: 0,
-        context: { disableRevalidate: true },
-      }),
-    ),
-  )
+  await Promise.all([
+    payload.updateGlobal({
+      slug: 'header',
+      data: { navItems: [] },
+      depth: 0,
+      context: { disableRevalidate: true },
+    }),
+    payload.updateGlobal({
+      slug: 'footer',
+      data: { navItems: [], contactColumns: [], copyrightText: '' },
+      depth: 0,
+      context: { disableRevalidate: true },
+    }),
+  ])
 
   await Promise.all(
     collections.map((collection) => payload.db.deleteMany({ collection, req, where: {} })),
@@ -311,9 +313,15 @@ export const seedCcp = async ({
     }),
     payload.updateGlobal({
       slug: 'footer',
-      data: footerNav(pageIds),
+      data: { ...footerNav(pageIds), ...footerContactVi() },
     }),
   ])
+
+  await payload.updateGlobal({
+    slug: 'footer',
+    locale: 'en',
+    data: footerContactEn(),
+  })
 
   payload.logger.info('CCP website seeded successfully!')
 }

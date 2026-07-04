@@ -1621,6 +1621,26 @@ export interface Footer {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Thêm các cột thông tin liên hệ (ví dụ: Trụ sở chính, Chi nhánh). Nội dung hỗ trợ đa ngôn ngữ.
+   */
+  contactColumns?:
+    | {
+        title: string;
+        items?:
+          | {
+              icon?: ('location' | 'phone' | 'fax' | 'none') | null;
+              text: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Dòng bản quyền hiển thị ở cuối footer
+   */
+  copyrightText?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1666,6 +1686,20 @@ export interface FooterSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  contactColumns?:
+    | T
+    | {
+        title?: T;
+        items?:
+          | T
+          | {
+              icon?: T;
+              text?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  copyrightText?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
