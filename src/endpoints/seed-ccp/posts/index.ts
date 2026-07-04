@@ -292,6 +292,11 @@ export function buildPostVi(def: PostDef, args: PostSeedArgs) {
     publishedAt: def.publishedAt,
     authors: [args.author],
     heroImage: args.heroImage.id,
+    meta: {
+      description: def.leadVi,
+      image: args.heroImage.id,
+      title: def.titleVi,
+    },
     categories: [args.categoryIds[def.categoryKey]],
     content: {
       root: {
@@ -332,6 +337,11 @@ export function buildPostEn(def: PostDef, args: PostSeedArgs) {
     slug: def.slugEn,
     title: def.titleEn,
     _status: 'published',
+    meta: {
+      description: def.leadEn,
+      image: args.heroImage.id,
+      title: def.titleEn,
+    },
     content: {
       root: {
         type: 'root',

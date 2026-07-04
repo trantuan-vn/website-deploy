@@ -24,14 +24,29 @@ async function getGlobal<T extends Global>(
   return global
 }
 
+type CachedGlobalFn<T extends Global> = () => Promise<DataFromGlobalSlug<T>>
+
+const cachedGlobalFns = new Map<string, CachedGlobalFn<Global>>()
+
 /**
- * Returns a unstable_cache function mapped with the cache tag for the slug
+ * Returns a stable unstable_cache function for the slug/locale.
+ * Instances are memoized at module level so revalidateTag can invalidate them.
  */
 export const getCachedGlobal = <T extends Global>(
   slug: T,
   depth = 0,
   locale: Locale = defaultLocale,
-) =>
-  unstable_cache(async () => getGlobal<T>(slug, depth, locale), [slug, String(depth), locale], {
-    tags: [`global_${slug}`],
-  })
+): CachedGlobalFn<T> => {
+  const cacheKey = `${slug}:${depth}:${locale}`
+
+  if (!cachedGlobalFns.has(cacheKey)) {
+    cachedGlobalFns.set(
+      cacheKey,
+      unstable_cache(async () => getGlobal<T>(slug, depth, locale), [slug, String(depth), locale], {
+        tags: [`global_${slug}`],
+      }),
+    )
+  }
+
+  return cachedGlobalFns.get(cacheKey)! as CachedGlobalFn<T>
+}

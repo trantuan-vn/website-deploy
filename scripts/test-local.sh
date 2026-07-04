@@ -5,6 +5,7 @@
 #   ./scripts/test-local.sh                 # up + đợi ready + smoke test
 #   ./scripts/test-local.sh --check         # chỉ smoke test (stack đã chạy)
 #   ./scripts/test-local.sh --up            # chỉ khởi động stack
+#   ./scripts/test-local.sh --mongo         # chỉ khởi động mongo
 #   ./scripts/test-local.sh --down          # dừng stack
 #   ./scripts/test-local.sh --seed-ccp      # up + seed CCP + smoke test
 #   ./scripts/test-local.sh --logs          # tail log payload-dev
@@ -34,6 +35,7 @@ DO_CHECK=true
 DO_DOWN=false
 DO_SEED=false
 DO_LOGS=false
+DO_MONGO=false
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -47,12 +49,13 @@ log_warn() { echo -e "${YELLOW}⚠${NC} $1"; }
 log_err()  { echo -e "${RED}✗${NC} $1" >&2; }
 
 usage() {
-  sed -n '2,16p' "$0" | sed 's/^# \?//'
+  sed -n '2,18p' "$0" | sed 's/^# \?//'
 }
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --up)        DO_UP=true; DO_CHECK=false; DO_DOWN=false ;;
+    --mongo)     DO_MONGO=true; DO_UP=false; DO_CHECK=false; DO_DOWN=false ;;
     --check)     DO_UP=false; DO_CHECK=true; DO_DOWN=false ;;
     --down)      DO_UP=false; DO_CHECK=false; DO_DOWN=true ;;
     --seed-ccp)  DO_SEED=true ;;
@@ -192,6 +195,35 @@ run_smoke_tests() {
   echo "  Frontend: $BASE_URL/"
 }
 
+wait_for_mongo() {
+  local elapsed=0
+  local interval=3
+
+  log_step "Đợi mongo (timeout ${WAIT_TIMEOUT}s)..."
+  while [[ "$elapsed" -lt "$WAIT_TIMEOUT" ]]; do
+    if "${COMPOSE[@]}" exec -T mongo mongosh --quiet --eval 'db.adminCommand({ping:1}).ok' 2>/dev/null | grep -q '^1$'; then
+      log_ok "mongo ready (${elapsed}s)"
+      echo ""
+      echo "  MongoDB: mongodb://localhost:27017/website-deploy"
+      return 0
+    fi
+    if (( elapsed > 0 && elapsed % 30 == 0 )); then
+      echo "  ... ${elapsed}s — waiting for mongo"
+    fi
+    sleep "$interval"
+    elapsed=$((elapsed + interval))
+  done
+
+  log_err "Timeout waiting for mongo"
+  return 1
+}
+
+start_mongo() {
+  log_step "Khởi động mongo"
+  "${COMPOSE[@]}" up -d mongo
+  wait_for_mongo
+}
+
 start_stack() {
   require_env_file
   log_step "Khởi động mongo + payload-dev"
@@ -227,6 +259,11 @@ main() {
 
   if [[ "$DO_DOWN" == true ]]; then
     stop_stack
+    exit 0
+  fi
+
+  if [[ "$DO_MONGO" == true ]]; then
+    start_mongo
     exit 0
   fi
 

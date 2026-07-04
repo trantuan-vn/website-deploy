@@ -62,53 +62,61 @@ export type SupportedTimezones =
   | 'Pacific/Fiji';
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "LexicalNodes_106E6C8F".
+ * via the `definition` "LexicalNodes_51B3CF86".
  */
-export type LexicalNodes_106E6C8F =
+export type LexicalNodes_51B3CF86 =
   | SerializedTextNode
   | SerializedTabNode
   | SerializedLineBreakNode
-  | SerializedParagraphNode<LexicalNodes_106E6C8F>
-  | SerializedHeadingNode<LexicalNodes_106E6C8F, 'h1' | 'h2' | 'h3' | 'h4'>
-  | SerializedAutoLinkNode<LexicalNodes_106E6C8F, LexicalLinkFields>
-  | SerializedLinkNode<LexicalNodes_106E6C8F, LexicalLinkFields>;
+  | SerializedParagraphNode<LexicalNodes_51B3CF86>
+  | SerializedHeadingNode<LexicalNodes_51B3CF86, 'h1' | 'h2' | 'h3' | 'h4'>
+  | SerializedAutoLinkNode<LexicalNodes_51B3CF86, LexicalLinkFields>
+  | SerializedLinkNode<LexicalNodes_51B3CF86, LexicalLinkFields>
+  | SerializedListNode<LexicalNodes_51B3CF86>
+  | SerializedListItemNode<LexicalNodes_51B3CF86>;
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "LexicalNodes_D0F9AE76".
+ * via the `definition` "LexicalNodes_F019490C".
  */
-export type LexicalNodes_D0F9AE76 =
+export type LexicalNodes_F019490C =
   | SerializedTextNode
   | SerializedTabNode
   | SerializedLineBreakNode
-  | SerializedParagraphNode<LexicalNodes_D0F9AE76>
-  | SerializedHeadingNode<LexicalNodes_D0F9AE76, 'h2' | 'h3' | 'h4'>
-  | SerializedAutoLinkNode<LexicalNodes_D0F9AE76, LexicalLinkFields>
-  | SerializedLinkNode<LexicalNodes_D0F9AE76, LexicalLinkFields>;
+  | SerializedParagraphNode<LexicalNodes_F019490C>
+  | SerializedHeadingNode<LexicalNodes_F019490C, 'h2' | 'h3' | 'h4'>
+  | SerializedAutoLinkNode<LexicalNodes_F019490C, LexicalLinkFields>
+  | SerializedLinkNode<LexicalNodes_F019490C, LexicalLinkFields>
+  | SerializedListNode<LexicalNodes_F019490C>
+  | SerializedListItemNode<LexicalNodes_F019490C>;
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "LexicalNodes_744BEF80".
+ * via the `definition` "LexicalNodes_47D10C91".
  */
-export type LexicalNodes_744BEF80 =
+export type LexicalNodes_47D10C91 =
   | SerializedTextNode
   | SerializedTabNode
   | SerializedLineBreakNode
-  | SerializedParagraphNode<LexicalNodes_744BEF80>
-  | SerializedAutoLinkNode<LexicalNodes_744BEF80, LexicalLinkFields>
-  | SerializedLinkNode<LexicalNodes_744BEF80, LexicalLinkFields>;
+  | SerializedParagraphNode<LexicalNodes_47D10C91>
+  | SerializedAutoLinkNode<LexicalNodes_47D10C91, LexicalLinkFields>
+  | SerializedLinkNode<LexicalNodes_47D10C91, LexicalLinkFields>
+  | SerializedListNode<LexicalNodes_47D10C91>
+  | SerializedListItemNode<LexicalNodes_47D10C91>;
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "LexicalNodes_658A03C4".
+ * via the `definition` "LexicalNodes_838AB8DB".
  */
-export type LexicalNodes_658A03C4 =
+export type LexicalNodes_838AB8DB =
   | SerializedTextNode
   | SerializedTabNode
   | SerializedLineBreakNode
-  | SerializedParagraphNode<LexicalNodes_658A03C4>
+  | SerializedParagraphNode<LexicalNodes_838AB8DB>
   | SerializedHorizontalRuleNode
   | SerializedBlockNode<BannerBlock | CodeBlock | MediaBlock_7426DDFC>
-  | SerializedHeadingNode<LexicalNodes_658A03C4, 'h1' | 'h2' | 'h3' | 'h4'>
-  | SerializedAutoLinkNode<LexicalNodes_658A03C4, LexicalLinkFields>
-  | SerializedLinkNode<LexicalNodes_658A03C4, LexicalLinkFields>;
+  | SerializedHeadingNode<LexicalNodes_838AB8DB, 'h1' | 'h2' | 'h3' | 'h4'>
+  | SerializedAutoLinkNode<LexicalNodes_838AB8DB, LexicalLinkFields>
+  | SerializedLinkNode<LexicalNodes_838AB8DB, LexicalLinkFields>
+  | SerializedListNode<LexicalNodes_838AB8DB>
+  | SerializedListItemNode<LexicalNodes_838AB8DB>;
 
 export interface Config {
   auth: {
@@ -220,7 +228,7 @@ export interface Page {
   title: string;
   hero: {
     type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
-    richText?: LexicalRichText<LexicalNodes_106E6C8F> | null;
+    richText?: LexicalRichText<LexicalNodes_51B3CF86> | null;
     links?:
       | {
           link: {
@@ -274,7 +282,7 @@ export interface Post {
   id: string;
   title: string;
   heroImage?: (string | null) | Media;
-  content: LexicalRichText<LexicalNodes_658A03C4>;
+  content: LexicalRichText<LexicalNodes_838AB8DB>;
   relatedPosts?: (string | Post)[] | null;
   categories?: (string | Category)[] | null;
   meta?: {
@@ -310,7 +318,7 @@ export interface Media {
   id: string;
   alt?: string | null;
   _h_folders?: (string | null) | Folder;
-  caption?: LexicalRichText<LexicalNodes_744BEF80> | null;
+  caption?: LexicalRichText<LexicalNodes_47D10C91> | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -436,7 +444,7 @@ export interface User {
  * via the `definition` "CallToActionBlock".
  */
 export interface CallToActionBlock {
-  richText?: LexicalRichText<LexicalNodes_106E6C8F> | null;
+  richText?: LexicalRichText<LexicalNodes_51B3CF86> | null;
   links?:
     | {
         link: {
@@ -473,7 +481,7 @@ export interface ContentBlock {
   columns?:
     | {
         size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
-        richText?: LexicalRichText<LexicalNodes_D0F9AE76> | null;
+        richText?: LexicalRichText<LexicalNodes_F019490C> | null;
         enableLink?: boolean | null;
         link?: {
           type?: ('reference' | 'custom') | null;
@@ -516,7 +524,7 @@ export interface MediaBlock {
  * via the `definition` "ArchiveBlock".
  */
 export interface ArchiveBlock {
-  introContent?: LexicalRichText<LexicalNodes_106E6C8F> | null;
+  introContent?: LexicalRichText<LexicalNodes_51B3CF86> | null;
   populateBy?: ('collection' | 'selection') | null;
   relationTo?: 'posts' | null;
   categories?: (string | Category)[] | null;
@@ -538,7 +546,7 @@ export interface ArchiveBlock {
 export interface FormBlock {
   form: string | Form;
   enableIntro?: boolean | null;
-  introContent?: LexicalRichText<LexicalNodes_106E6C8F> | null;
+  introContent?: LexicalRichText<LexicalNodes_51B3CF86> | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'formBlock';
@@ -556,7 +564,7 @@ export interface Form {
    * Choose whether to display an on-page message or redirect to a different page after they submit the form.
    */
   confirmationType?: ('message' | 'redirect') | null;
-  confirmationMessage?: LexicalRichText<LexicalNodes_106E6C8F>;
+  confirmationMessage?: LexicalRichText<LexicalNodes_51B3CF86>;
   redirect?: {
     url: string;
   };
@@ -574,7 +582,7 @@ export interface Form {
         /**
          * Enter the message that should be sent in this email.
          */
-        message?: LexicalRichText<LexicalNodes_744BEF80> | null;
+        message?: LexicalRichText<LexicalNodes_47D10C91> | null;
         id?: string | null;
       }[]
     | null;
@@ -626,7 +634,7 @@ export interface Email {
  * via the `definition` "Message".
  */
 export interface Message {
-  message?: LexicalRichText<LexicalNodes_744BEF80> | null;
+  message?: LexicalRichText<LexicalNodes_47D10C91> | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'message';
@@ -1758,7 +1766,7 @@ export interface BannerBlock {
   id: string;
   blockType: 'banner';
   style: 'info' | 'warning' | 'error' | 'success';
-  content: LexicalRichText<LexicalNodes_744BEF80>;
+  content: LexicalRichText<LexicalNodes_47D10C91>;
   blockName?: string | null;
 }
 /**
@@ -1865,6 +1873,20 @@ export interface SerializedLinkNode<TChildren, TFields = LexicalLinkFields> exte
 export interface SerializedAutoLinkNode<TChildren, TFields = LexicalLinkFields> extends SerializedLexicalElementBase<TChildren> {
   type: 'autolink';
   fields: TFields;
+}
+
+export interface SerializedListNode<TChildren> extends SerializedLexicalElementBase<TChildren> {
+  type: 'list';
+  checked?: boolean;
+  listType: 'number' | 'bullet' | 'check';
+  start: number;
+  tag: 'ul' | 'ol';
+}
+
+export interface SerializedListItemNode<TChildren> extends SerializedLexicalElementBase<TChildren> {
+  type: 'listitem';
+  checked?: boolean;
+  value: number;
 }
 
 /** Shape of a Lexical `richText` field. */
