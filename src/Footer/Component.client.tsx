@@ -10,6 +10,7 @@ import type { Footer as FooterType } from '@/payload-types'
 
 import { CMSLink } from '@/components/Link'
 import { Logo } from '@/components/Logo/Logo'
+import { MobileNavMenu } from '@/components/MobileNavMenu'
 import { cn } from '@/utilities/ui'
 
 interface FooterClientProps {
@@ -56,13 +57,26 @@ export const FooterClient: React.FC<FooterClientProps> = ({ data }) => {
       )}
       {...(headerTheme ? { 'data-theme': headerTheme } : {})}
     >
-      <div className="container py-8 gap-8 flex flex-col md:flex-row md:justify-between">
-        <Link className="flex items-center" href="/">
-          <Logo />
-        </Link>
+      <div className="container py-8">
+        <div className="relative flex items-center justify-between gap-4">
+          <Link className="flex shrink-0 items-center" href="/">
+            <Logo />
+          </Link>
 
-        <div className="flex flex-col items-start md:flex-row gap-4 md:items-center">
-          <nav className="flex flex-col md:flex-row gap-4">
+          <MobileNavMenu
+            items={navItems}
+            linkClassName={
+              isDarkFooter
+                ? 'text-white/80 hover:text-white'
+                : 'text-foreground/80 hover:text-foreground'
+            }
+            menuButtonClassName={
+              isDarkFooter ? 'text-white/80 hover:text-white' : 'text-foreground/80 hover:text-foreground'
+            }
+            variant="footer"
+          />
+
+          <nav className="hidden md:flex md:flex-row gap-4">
             {navItems.map(({ link }, i) => {
               return (
                 <CMSLink

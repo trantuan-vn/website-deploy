@@ -334,7 +334,7 @@ export function buildPostVi(def: PostDef, args: PostSeedArgs) {
 
 export function buildPostEn(def: PostDef, args: PostSeedArgs) {
   return asPostData({
-    slug: def.slugEn,
+    slug: def.slugVi,
     title: def.titleEn,
     _status: 'published',
     meta: {

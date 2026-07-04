@@ -9,9 +9,6 @@ import React from 'react'
 import PageClient from './page.client'
 import { getLocale } from '@/utilities/locale.server'
 
-export const dynamic = 'force-static'
-export const revalidate = 600
-
 export default async function Page() {
   const locale = await getLocale()
   const payload = await getPayload({ config: configPromise })

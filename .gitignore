@@ -1,25 +1,53 @@
-build
-dist / media
-node_modules
-.DS_Store
-.env
-.next
-next-env.d.ts
-tsconfig.tsbuildinfo
-.vercel
-.pnpm-store
+# Dependencies
+node_modules/
+.pnpm-store/
 
-# Payload default media upload directory
-public/media/
-k8s/secret.yaml
+# Build output
+.next/
+out/
+build/
+dist/
+tsconfig.tsbuildinfo
+*.tsbuildinfo
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+test.env
 production.env
 origin.pem
 origin.key
+k8s/secret.yaml
+scripts/deploy-oke.env
 
+# Runtime media (Payload uploads; PVC on OKE)
+media/
+public/media/
 
-# Playwright
-node_modules/
+# Deploy platforms
+.vercel
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE (local workspace files; .vscode/ is shared != tracked team settings)
+*.code-workspace
+
+# Logs & debug
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# Testing
+coverage/
 /test-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Next.js generated
+next-env.d.ts

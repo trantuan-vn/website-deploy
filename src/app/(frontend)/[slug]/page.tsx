@@ -8,10 +8,9 @@ import React, { cache } from 'react'
 import { homeStatic } from '@/endpoints/seed/home-static'
 
 import { RenderBlocks } from '@/blocks/RenderBlocks'
-import { RenderHero } from '@/heros/RenderHero'
+import { RenderHeroes } from '@/heros/RenderHero'
 import { generateMeta } from '@/utilities/generateMeta'
 import { cn } from '@/utilities/ui'
-import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { safeBuildStaticParams } from '@/utilities/safeBuildStaticParams'
 import { findDocumentBySlug } from '@/utilities/findDocumentBySlug'
@@ -73,18 +72,17 @@ export default async function Page({ params: paramsPromise }: Args) {
     return <PayloadRedirects url={url} />
   }
 
-  const { hero, layout } = page
-  const isFullBleedHero = hero?.type === 'highImpact'
+  const { heroes, layout } = page
+  const isFullBleedHero = (heroes || []).some((hero) => hero.type === 'highImpact')
 
   return (
     <article className={cn('pb-24', !isFullBleedHero && 'pt-16')}>
-      <PageClient />
       {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />
 
       {draft && <LivePreviewListener />}
 
-      <RenderHero {...hero} />
+      <RenderHeroes heroes={heroes} />
       <RenderBlocks blocks={layout} />
     </article>
   )

@@ -13,36 +13,42 @@ import {
   contentBlock,
   contentColumn,
   ctaBlock,
-  heroLinkCustom,
   heroLinkReference,
 } from '../helpers/blocks'
 import { asPageData } from '../helpers/cast'
 
 const PUBLISHED_AT = '2026-01-15T08:00:00.000Z'
 
+const homeHeroVi = (args: PageSeedArgs, media: keyof Pick<PageSeedArgs['media'], 'heroHome' | 'heroHome2' | 'heroHome3'>) => ({
+  type: 'highImpact' as const,
+  media: args.media[media].id,
+  richText: lexicalRoot([
+    h1('Đối tác Bù trừ Trung tâm cho thị trường chứng khoán cơ sở Việt Nam'),
+    paragraph(
+      'Công ty Bù trừ Chứng khoán Việt Nam — công ty con Tổng công ty Lưu ký và Bù trừ Chứng khoán Việt Nam (VSDC) — triển khai cơ chế CCP theo lộ trình chính thức vận hành quý I/2027.',
+    ),
+  ]),
+})
+
 export const homeVi = (args: PageSeedArgs) => asPageData({
   title: 'Trang chủ',
   slug: 'home',
   _status: 'published',
   publishedAt: PUBLISHED_AT,
-  hero: {
-    type: 'highImpact',
-    media: args.media.heroHome.id,
-    richText: lexicalRoot([
-      h1('Đối tác Bù trừ Trung tâm cho thị trường chứng khoán cơ sở Việt Nam'),
-      paragraph(
-        'Công ty Bù trừ Chứng khoán Việt Nam — công ty con Tổng công ty Lưu ký và Bù trừ Chứng khoán Việt Nam (VSDC) — triển khai cơ chế CCP theo lộ trình chính thức vận hành quý I/2027.',
-      ),
-    ]),
+  heroes: [
+    homeHeroVi(args, 'heroHome'),
+    homeHeroVi(args, 'heroHome2'),
+    homeHeroVi(args, 'heroHome3'),
+  ].map((hero) => ({
+    ...hero,
     links: [
       heroLinkReference(
         'Tìm hiểu mô hình CCP',
         args.pageIds['mo-hinh-ccp'],
         'default',
       ),
-      heroLinkCustom('VSDC.vn', 'https://vsd.vn', 'outline', true),
     ],
-  },
+  })),
   layout: [
     contentBlock(
       contentColumn(
@@ -139,24 +145,31 @@ export const homeVi = (args: PageSeedArgs) => asPageData({
   },
 })
 
+const homeHeroEn = (args: PageSeedArgs, media: keyof Pick<PageSeedArgs['media'], 'heroHome' | 'heroHome2' | 'heroHome3'>) => ({
+  type: 'highImpact' as const,
+  media: args.media[media].id,
+  richText: lexicalRoot([
+    h1('Central Counterparty for Vietnam\'s Cash Equity Market'),
+    paragraph(
+      'Vietnam Securities Clearing Corporation — a wholly-owned subsidiary of Vietnam Securities Depository and Clearing Corporation (VSDC) — is implementing CCP clearing with official go-live targeted for Q1 2027.',
+    ),
+  ]),
+})
+
 export const homeEn = (args: PageSeedArgs) => asPageData({
   title: 'Home',
   slug: 'home',
   _status: 'published',
-  hero: {
-    type: 'highImpact',
-    media: args.media.heroHome.id,
-    richText: lexicalRoot([
-      h1('Central Counterparty for Vietnam\'s Cash Equity Market'),
-      paragraph(
-        'Vietnam Securities Clearing Corporation — a wholly-owned subsidiary of Vietnam Securities Depository and Clearing Corporation (VSDC) — is implementing CCP clearing with official go-live targeted for Q1 2027.',
-      ),
-    ]),
+  heroes: [
+    homeHeroEn(args, 'heroHome'),
+    homeHeroEn(args, 'heroHome2'),
+    homeHeroEn(args, 'heroHome3'),
+  ].map((hero) => ({
+    ...hero,
     links: [
       heroLinkReference('Explore CCP Model', args.pageIds['mo-hinh-ccp'], 'default'),
-      heroLinkCustom('VSDC.vn', 'https://vsd.vn', 'outline', true),
     ],
-  },
+  })),
   layout: [
     contentBlock(
       contentColumn(

@@ -2,18 +2,25 @@
 import { useHeaderTheme } from '@/providers/HeaderTheme'
 import React, { useEffect } from 'react'
 
-import type { Page } from '@/payload-types'
+import type { HeroItem } from '@/heros/types'
 
 import { CMSLink } from '@/components/Link'
 import { Media } from '@/components/Media'
 import RichText from '@/components/RichText'
 
-export const HighImpactHero: React.FC<Page['hero']> = ({ links, media, richText }) => {
+export const HighImpactHero: React.FC<HeroItem & { isActive?: boolean }> = ({
+  isActive = true,
+  links,
+  media,
+  richText,
+}) => {
   const { setHeaderTheme } = useHeaderTheme()
 
   useEffect(() => {
+    if (!isActive) return
+
     setHeaderTheme('dark')
-  })
+  }, [isActive, setHeaderTheme])
 
   return (
     <div

@@ -4,7 +4,7 @@ import type { RequiredDataFromCollectionSlug } from 'payload'
 export const homeStatic: RequiredDataFromCollectionSlug<'pages'> = {
   slug: 'home',
   _status: 'published',
-  hero: {
+  heroes: [{
     type: 'lowImpact',
     richText: {
       root: {
@@ -80,6 +80,7 @@ export const homeStatic: RequiredDataFromCollectionSlug<'pages'> = {
       },
     },
   },
+  ],
   meta: {
     description: 'An open-source website built with VSC and Next.js.',
     title: 'VSC Website Template',

@@ -3,9 +3,14 @@ import type { Post } from '@/payload-types'
 
 import { CCP_CATEGORIES } from './categories'
 import { memberContactForm } from './form-member-contact'
-import { footerContactEn, footerContactVi, footerNav } from './globals/footer'
-import { headerNav } from './globals/header'
-import { fetchFileByURL, IMAGE_URLS, MEDIA_ALT } from './images'
+import {
+  footerContactEnFromExisting,
+  footerContactVi,
+  footerNav,
+  footerNavEnFromExisting,
+} from './globals/footer'
+import { headerNav, headerNavEnFromExisting } from './globals/header'
+import { fetchFileByURL, fetchFileFromPublic, IMAGE_URLS, MEDIA_ALT, PUBLIC_IMAGES } from './images'
 import {
   gioiThieuEn,
   gioiThieuVi,
@@ -94,13 +99,17 @@ export const seedCcp = async ({
 
   const [
     heroHomeBuffer,
+    heroHome2Buffer,
+    heroHome3Buffer,
     heroAboutBuffer,
     heroModelBuffer,
     heroRiskBuffer,
     heroRoadmapBuffer,
     metaDefaultBuffer,
   ] = await Promise.all([
-    fetchFileByURL(IMAGE_URLS.heroHome),
+    fetchFileFromPublic(PUBLIC_IMAGES.heroHome),
+    fetchFileFromPublic(PUBLIC_IMAGES.heroHome2),
+    fetchFileFromPublic(PUBLIC_IMAGES.heroHome3),
     fetchFileByURL(IMAGE_URLS.heroAbout),
     fetchFileByURL(IMAGE_URLS.heroModel),
     fetchFileByURL(IMAGE_URLS.heroRisk),
@@ -108,8 +117,17 @@ export const seedCcp = async ({
     fetchFileByURL(IMAGE_URLS.metaDefault),
   ])
 
-  const [demoAuthor, heroHome, heroAbout, heroModel, heroRisk, heroRoadmap, metaDefault] =
-    await Promise.all([
+  const [
+    demoAuthor,
+    heroHome,
+    heroHome2,
+    heroHome3,
+    heroAbout,
+    heroModel,
+    heroRisk,
+    heroRoadmap,
+    metaDefault,
+  ] = await Promise.all([
       payload.create({
         collection: 'users',
         data: {
@@ -122,6 +140,16 @@ export const seedCcp = async ({
         collection: 'media',
         data: { alt: MEDIA_ALT.heroHome },
         file: heroHomeBuffer,
+      }),
+      payload.create({
+        collection: 'media',
+        data: { alt: MEDIA_ALT.heroHome2 },
+        file: heroHome2Buffer,
+      }),
+      payload.create({
+        collection: 'media',
+        data: { alt: MEDIA_ALT.heroHome3 },
+        file: heroHome3Buffer,
       }),
       payload.create({
         collection: 'media',
@@ -150,11 +178,17 @@ export const seedCcp = async ({
       }),
     ])
 
+  // heroPost uses the same source file as heroHome3 (keniem20nam.jpg)
+  const heroPost = heroHome3
+
   const media: SeedMedia = {
     heroHome,
+    heroHome2,
+    heroHome3,
     heroAbout,
     heroModel,
     heroRisk,
+    heroPost,
     heroRoadmap,
     metaDefault,
   }
@@ -249,7 +283,7 @@ export const seedCcp = async ({
   payload.logger.info('— Seeding posts...')
 
   const postArgs = {
-    heroImage: heroRisk,
+    heroImage: heroPost,
     author: demoAuthor,
     categoryIds,
   }
@@ -302,11 +336,11 @@ export const seedCcp = async ({
     }),
   )
 
-  payload.logger.info('— Seeding globals...')
+  payload.logger.info('— Seeding globals (VI)...')
 
   // Do not pass disableRevalidate here — header/footer are read via unstable_cache on the
   // frontend and must trigger revalidateTag after seed (especially in production on OKE).
-  await Promise.all([
+  const [headerViDoc, footerViDoc] = await Promise.all([
     payload.updateGlobal({
       slug: 'header',
       data: headerNav(pageIds),
@@ -317,11 +351,24 @@ export const seedCcp = async ({
     }),
   ])
 
-  await payload.updateGlobal({
-    slug: 'footer',
-    locale: 'en',
-    data: footerContactEn(),
-  })
+  payload.logger.info('— Seeding English header & footer translations...')
+
+  // Localized array fields require existing row IDs — map EN labels onto VI structure.
+  await Promise.all([
+    payload.updateGlobal({
+      slug: 'header',
+      locale: 'en',
+      data: headerNavEnFromExisting(headerViDoc.navItems),
+    }),
+    payload.updateGlobal({
+      slug: 'footer',
+      locale: 'en',
+      data: {
+        ...footerNavEnFromExisting(footerViDoc.navItems),
+        ...footerContactEnFromExisting(footerViDoc.contactColumns),
+      },
+    }),
+  ])
 
   payload.logger.info('CCP website seeded successfully!')
 }

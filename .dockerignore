@@ -1,26 +1,66 @@
+# Docker build context — exclude files not needed for OKE image build
+
+# Docker / compose (image is built from Dockerfile only)
 Dockerfile
 .dockerignore
+docker-compose.yml
+docker-compose.*.yml
+
+# Dependencies & build output (rebuilt inside image)
 node_modules
 .pnpm-store
 npm-debug.log
 .next
+dist
+tsconfig.tsbuildinfo
+
+# Git & IDE
 .git
 .gitignore
+.vscode
+website-deploy.code-workspace
+**/.DS_Store
+
+# Secrets & local env (injected at build/runtime via K8s)
 .env
 .env.*
+.env.example
 production.env
+test.env
+origin.pem
+origin.key
+k8s/secret.yaml
+
+# OKE / K8s manifests (applied separately, not baked into image)
+k8s
+
+# Deploy & ops scripts
+scripts
+
+# Docs
 README.md
-.vscode
+docs
+
+# Tests & QA
+tests
 test-results
 playwright-report
 blob-report
 playwright/.cache
-**/.DS_Store
-dist
+playwright.config.ts
+vitest.config.mts
+vitest.setup.ts
+
+# Dev tooling (not used during `next build`)
+.editorconfig
+.prettierrc.json
+.prettierignore
+eslint.config.mjs
+components.json
+
+# Runtime media (PVC on OKE; seed writes to public/media at runtime)
 media
 public/media
-k8s/secret.yaml
-origin.pem
-origin.key
-tsconfig.tsbuildinfo
+
+# Vercel / other platforms
 .vercel

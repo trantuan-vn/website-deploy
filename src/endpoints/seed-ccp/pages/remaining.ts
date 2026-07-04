@@ -26,10 +26,11 @@ export const quyCheVi = (args: PageSeedArgs) => asPageData({
   slug: 'quy-che',
   _status: 'published',
   publishedAt: PUBLISHED_AT,
-  hero: {
+  heroes: [{
     type: 'lowImpact',
     richText: lexicalRoot([h1('Quy chế & Văn bản pháp lý')]),
   },
+  ],
   layout: [
     contentBlock(
       contentColumn(
@@ -79,12 +80,13 @@ export const quyCheVi = (args: PageSeedArgs) => asPageData({
 
 export const quyCheEn = (args: PageSeedArgs) => asPageData({
   title: 'Rules & Regulations',
-  slug: 'rules',
+  slug: 'quy-che',
   _status: 'published',
-  hero: {
+  heroes: [{
     type: 'lowImpact',
     richText: lexicalRoot([h1('Rules & Legal Documents')]),
   },
+  ],
   layout: [
     contentBlock(
       contentColumn(
@@ -137,10 +139,11 @@ export const congBoThongTinVi = (args: PageSeedArgs) => asPageData({
   slug: 'cong-bo-thong-tin',
   _status: 'published',
   publishedAt: PUBLISHED_AT,
-  hero: {
+  heroes: [{
     type: 'lowImpact',
     richText: lexicalRoot([h1('Công bố thông tin & PFMI')]),
   },
+  ],
   layout: [
     contentBlock(
       contentColumn(
@@ -183,12 +186,13 @@ export const congBoThongTinVi = (args: PageSeedArgs) => asPageData({
 
 export const congBoThongTinEn = (args: PageSeedArgs) => asPageData({
   title: 'Disclosure',
-  slug: 'disclosure',
+  slug: 'cong-bo-thong-tin',
   _status: 'published',
-  hero: {
+  heroes: [{
     type: 'lowImpact',
     richText: lexicalRoot([h1('Disclosure & PFMI')]),
   },
+  ],
   layout: [
     contentBlock(
       contentColumn(
@@ -234,11 +238,12 @@ export const loTrinhVi = (args: PageSeedArgs) => asPageData({
   slug: 'lo-trinh',
   _status: 'published',
   publishedAt: PUBLISHED_AT,
-  hero: {
+  heroes: [{
     type: 'mediumImpact',
     media: args.media.heroRoadmap.id,
     richText: lexicalRoot([h1('Lộ trình triển khai CCP')]),
   },
+  ],
   layout: [
     contentBlock(
       contentColumn(
@@ -280,13 +285,14 @@ export const loTrinhVi = (args: PageSeedArgs) => asPageData({
 
 export const loTrinhEn = (args: PageSeedArgs) => asPageData({
   title: 'Roadmap',
-  slug: 'roadmap',
+  slug: 'lo-trinh',
   _status: 'published',
-  hero: {
+  heroes: [{
     type: 'mediumImpact',
     media: args.media.heroRoadmap.id,
     richText: lexicalRoot([h1('CCP Implementation Roadmap')]),
   },
+  ],
   layout: [
     contentBlock(
       contentColumn(
@@ -331,10 +337,11 @@ export const daoTaoVi = (args: PageSeedArgs) => asPageData({
   slug: 'dao-tao',
   _status: 'published',
   publishedAt: PUBLISHED_AT,
-  hero: {
+  heroes: [{
     type: 'lowImpact',
     richText: lexicalRoot([h1('Đào tạo & Kiểm thử hệ thống')]),
   },
+  ],
   layout: [
     contentBlock(
       contentColumn(
@@ -377,12 +384,13 @@ export const daoTaoVi = (args: PageSeedArgs) => asPageData({
 
 export const daoTaoEn = (args: PageSeedArgs) => asPageData({
   title: 'Training & Testing',
-  slug: 'training',
+  slug: 'dao-tao',
   _status: 'published',
-  hero: {
+  heroes: [{
     type: 'lowImpact',
     richText: lexicalRoot([h1('Training & System Testing')]),
   },
+  ],
   layout: [
     contentBlock(
       contentColumn(
@@ -428,10 +436,11 @@ export const heThongVi = (args: PageSeedArgs) => asPageData({
   slug: 'he-thong',
   _status: 'published',
   publishedAt: PUBLISHED_AT,
-  hero: {
+  heroes: [{
     type: 'lowImpact',
     richText: lexicalRoot([h1('Hệ thống kỹ thuật')]),
   },
+  ],
   layout: [
     contentBlock(
       contentColumn(
@@ -481,12 +490,13 @@ export const heThongVi = (args: PageSeedArgs) => asPageData({
 
 export const heThongEn = (args: PageSeedArgs) => asPageData({
   title: 'Systems',
-  slug: 'systems',
+  slug: 'he-thong',
   _status: 'published',
-  hero: {
+  heroes: [{
     type: 'lowImpact',
     richText: lexicalRoot([h1('Technical Systems')]),
   },
+  ],
   layout: [
     contentBlock(
       contentColumn(
@@ -541,7 +551,7 @@ export const lienHeVi = (args: PageSeedArgs) => {
     slug: 'lien-he',
     _status: 'published',
     publishedAt: PUBLISHED_AT,
-    hero: { type: 'none' },
+    heroes: [{ type: 'none' }],
     layout: [
       formBlock(args.form.id, lexicalRoot([h3('Liên hệ bộ phận CCP / Hỗ trợ thành viên')])),
       contentBlock(
@@ -571,9 +581,9 @@ export const lienHeEn = (args: PageSeedArgs) => {
   if (!args.form) throw new Error('Form required for lien-he page')
   return asPageData({
     title: 'Contact',
-    slug: 'contact',
+    slug: 'lien-he',
     _status: 'published',
-    hero: { type: 'none' },
+    heroes: [{ type: 'none' }],
     layout: [
       formBlock(args.form.id, lexicalRoot([h3('Contact CCP / Member Support')])),
       contentBlock(

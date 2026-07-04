@@ -3,7 +3,7 @@ import { useHeaderTheme } from '@/providers/HeaderTheme'
 import { useTheme } from '@/providers/Theme'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 
 import type { Header } from '@/payload-types'
 import type { Locale } from '@/utilities/locale'
@@ -21,13 +21,18 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
   const { headerTheme, setHeaderTheme } = useHeaderTheme()
   const { theme: globalTheme } = useTheme()
   const pathname = usePathname()
+  const isFirstPathnameEffect = useRef(true)
   const effectiveTheme = headerTheme ?? globalTheme ?? 'light'
   const isDarkHeader = effectiveTheme === 'dark'
 
   useEffect(() => {
+    if (isFirstPathnameEffect.current) {
+      isFirstPathnameEffect.current = false
+      return
+    }
+
     setHeaderTheme(null)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname])
+  }, [pathname, setHeaderTheme])
 
   return (
     <header

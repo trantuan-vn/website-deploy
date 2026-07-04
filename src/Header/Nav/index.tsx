@@ -7,6 +7,7 @@ import type { Locale } from '@/utilities/locale'
 
 import { LocaleSelector } from '@/components/LocaleSelector'
 import { CMSLink } from '@/components/Link'
+import { MobileNavMenu } from '@/components/MobileNavMenu'
 import { ThemeSelector } from '@/providers/Theme/ThemeSelector'
 import Link from 'next/link'
 import { SearchIcon } from 'lucide-react'
@@ -17,6 +18,8 @@ export const HeaderNav: React.FC<{ data: HeaderType; locale: Locale }> = ({ data
 
   return (
     <nav className="flex gap-1 items-center">
+      <MobileNavMenu items={navItems} variant="header" />
+
       <div className="hidden md:flex items-center gap-1 mr-2">
         {navItems.map(({ link }, i) => {
           return (

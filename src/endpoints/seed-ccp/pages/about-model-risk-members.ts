@@ -25,11 +25,12 @@ export const gioiThieuVi = (args: PageSeedArgs) => asPageData({
   slug: 'gioi-thieu',
   _status: 'published',
   publishedAt: PUBLISHED_AT,
-  hero: {
+  heroes: [{
     type: 'mediumImpact',
     media: args.media.heroAbout.id,
     richText: lexicalRoot([h1('Công ty Bù trừ Chứng khoán Việt Nam')]),
   },
+  ],
   layout: [
     contentBlock(
       contentColumn(
@@ -98,13 +99,14 @@ export const gioiThieuVi = (args: PageSeedArgs) => asPageData({
 
 export const gioiThieuEn = (args: PageSeedArgs) => asPageData({
   title: 'About',
-  slug: 'about',
+  slug: 'gioi-thieu',
   _status: 'published',
-  hero: {
+  heroes: [{
     type: 'mediumImpact',
     media: args.media.heroAbout.id,
     richText: lexicalRoot([h1('Vietnam Securities Clearing Corporation')]),
   },
+  ],
   layout: [
     contentBlock(
       contentColumn(
@@ -178,11 +180,12 @@ export const moHinhCcpVi = (args: PageSeedArgs) => asPageData({
   slug: 'mo-hinh-ccp',
   _status: 'published',
   publishedAt: PUBLISHED_AT,
-  hero: {
+  heroes: [{
     type: 'mediumImpact',
     media: args.media.heroModel.id,
     richText: lexicalRoot([h1('Mô hình Đối tác Bù trừ Trung tâm')]),
   },
+  ],
   layout: [
     contentBlock(
       contentColumn(
@@ -260,13 +263,14 @@ export const moHinhCcpVi = (args: PageSeedArgs) => asPageData({
 
 export const moHinhCcpEn = (args: PageSeedArgs) => asPageData({
   title: 'CCP Model',
-  slug: 'ccp-model',
+  slug: 'mo-hinh-ccp',
   _status: 'published',
-  hero: {
+  heroes: [{
     type: 'mediumImpact',
     media: args.media.heroModel.id,
     richText: lexicalRoot([h1('Central Counterparty Clearing Model')]),
   },
+  ],
   layout: [
     contentBlock(
       contentColumn(
@@ -347,10 +351,11 @@ export const quanTriRuiRoVi = (args: PageSeedArgs) => asPageData({
   slug: 'quan-tri-rui-ro',
   _status: 'published',
   publishedAt: PUBLISHED_AT,
-  hero: {
+  heroes: [{
     type: 'lowImpact',
     richText: lexicalRoot([h1('Khung quản trị rủi ro CCP')]),
   },
+  ],
   layout: [
     contentBlock(
       contentColumn(
@@ -411,12 +416,13 @@ export const quanTriRuiRoVi = (args: PageSeedArgs) => asPageData({
 
 export const quanTriRuiRoEn = (args: PageSeedArgs) => asPageData({
   title: 'Risk Management',
-  slug: 'risk-management',
+  slug: 'quan-tri-rui-ro',
   _status: 'published',
-  hero: {
+  heroes: [{
     type: 'lowImpact',
     richText: lexicalRoot([h1('CCP Risk Management Framework')]),
   },
+  ],
   layout: [
     contentBlock(
       contentColumn(
@@ -481,10 +487,11 @@ export const thanhVienVi = (args: PageSeedArgs) => asPageData({
   slug: 'thanh-vien',
   _status: 'published',
   publishedAt: PUBLISHED_AT,
-  hero: {
+  heroes: [{
     type: 'lowImpact',
     richText: lexicalRoot([h1('Thành viên bù trừ')]),
   },
+  ],
   layout: [
     contentBlock(
       contentColumn(
@@ -548,12 +555,13 @@ export const thanhVienVi = (args: PageSeedArgs) => asPageData({
 
 export const thanhVienEn = (args: PageSeedArgs) => asPageData({
   title: 'Clearing Members',
-  slug: 'clearing-members',
+  slug: 'thanh-vien',
   _status: 'published',
-  hero: {
+  heroes: [{
     type: 'lowImpact',
     richText: lexicalRoot([h1('Clearing Members')]),
   },
+  ],
   layout: [
     contentBlock(
       contentColumn(

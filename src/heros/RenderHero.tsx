@@ -2,24 +2,20 @@ import React from 'react'
 
 import type { Page } from '@/payload-types'
 
-import { HighImpactHero } from '@/heros/HighImpact'
-import { LowImpactHero } from '@/heros/LowImpact'
-import { MediumImpactHero } from '@/heros/MediumImpact'
+import { HeroCarousel } from '@/heros/HeroCarousel'
+import { RenderHero } from '@/heros/RenderSingleHero'
+import type { HeroItem } from '@/heros/types'
 
-const heroes = {
-  highImpact: HighImpactHero,
-  lowImpact: LowImpactHero,
-  mediumImpact: MediumImpactHero,
-}
+export const RenderHeroes: React.FC<{ heroes?: Page['heroes'] | null }> = ({ heroes: heroItems }) => {
+  const validHeroes = (heroItems || []).filter(
+    (hero): hero is HeroItem => Boolean(hero?.type && hero.type !== 'none'),
+  )
 
-export const RenderHero: React.FC<Page['hero']> = (props) => {
-  const { type } = props || {}
+  if (validHeroes.length === 0) return null
 
-  if (!type || type === 'none') return null
+  if (validHeroes.length === 1) {
+    return <RenderHero {...validHeroes[0]} />
+  }
 
-  const HeroToRender = heroes[type]
-
-  if (!HeroToRender) return null
-
-  return <HeroToRender {...props} />
+  return <HeroCarousel heroes={validHeroes} />
 }

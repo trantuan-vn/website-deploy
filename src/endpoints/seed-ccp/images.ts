@@ -1,8 +1,16 @@
+import fs from 'fs/promises'
+import path from 'path'
+
 import type { File } from 'payload'
 
+export const PUBLIC_IMAGES = {
+  heroHome: 'toanha_vsd.jpg',
+  heroHome2: 'congnghe_vsd.jpg',
+  heroHome3: 'keniem20nam.jpg',
+  heroPost: 'keniem20nam.jpg',
+} as const
+
 export const IMAGE_URLS = {
-  heroHome:
-    'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920',
   heroAbout:
     'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=1920',
   heroModel:
@@ -16,13 +24,29 @@ export const IMAGE_URLS = {
 } as const
 
 export const MEDIA_ALT = {
-  heroHome: 'Tòa nhà tài chính hiện đại — hạ tầng thị trường vốn',
+  heroHome: 'Tòa nhà VSD — hạ tầng thị trường vốn',
+  heroHome2: 'Công nghệ VSD — hệ thống bù trừ và lưu ký',
+  heroHome3: 'Kỷ niệm 20 năm VSD',
+  heroPost: 'Kỷ niệm 20 năm VSD',
   heroAbout: 'Hội nghị thị trường chứng khoán — đối tác institution',
   heroModel: 'Sơ đồ luồng giao dịch chứng khoán',
   heroRisk: 'Biểu đồ quản trị rủi ro tài chính',
   heroRoadmap: 'Lộ trình phát triển — timeline',
   metaDefault: 'Logo placeholder CCP VN',
 } as const
+
+export async function fetchFileFromPublic(filename: string): Promise<File> {
+  const filePath = path.join(process.cwd(), 'public', filename)
+  const data = await fs.readFile(filePath)
+  const ext = filename.split('.').pop() || 'jpg'
+
+  return {
+    name: filename,
+    data: Buffer.from(data),
+    mimetype: `image/${ext === 'webp' ? 'webp' : 'jpeg'}`,
+    size: data.length,
+  }
+}
 
 export async function fetchFileByURL(url: string): Promise<File> {
   const res = await fetch(url, {
