@@ -1,0 +1,18 @@
+# Run: docker compose -f docker-compose.prod.yml -f docker-compose.seed.yml run --rm seed-ccp
+services:
+  seed-ccp:
+    image: node:24-alpine
+    working_dir: /app
+    volumes:
+      - .:/app
+      - /app/node_modules
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: mongodb://host.docker.internal:27017/website-deploy
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    command: >
+      sh -c "corepack enable pnpm &&
+      pnpm install --frozen-lockfile &&
+      NODE_OPTIONS=--no-deprecation pnpm exec tsx scripts/seed-ccp-local.mts"

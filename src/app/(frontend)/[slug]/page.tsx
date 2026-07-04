@@ -13,6 +13,8 @@ import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { safeBuildStaticParams } from '@/utilities/safeBuildStaticParams'
+import { findDocumentBySlug } from '@/utilities/findDocumentBySlug'
+import { getLocale } from '@/utilities/locale.server'
 
 export async function generateStaticParams() {
   return safeBuildStaticParams(async () => {
@@ -48,6 +50,7 @@ type Args = {
 
 export default async function Page({ params: paramsPromise }: Args) {
   const { isEnabled: draft } = await draftMode()
+  const locale = await getLocale()
   const { slug = 'home' } = await paramsPromise
   // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug)
@@ -56,10 +59,12 @@ export default async function Page({ params: paramsPromise }: Args) {
 
   page = await queryPageBySlug({
     slug: decodedSlug,
+    locale,
   })
 
-  // Remove this code once your website is seeded
-  if (!page && slug === 'home') {
+  // Dev-only placeholder when the DB is empty. In production an empty DB should 404, not
+  // look like a fresh template after every redeploy.
+  if (!page && slug === 'home' && process.env.NODE_ENV !== 'production') {
     page = homeStatic
   }
 
@@ -84,33 +89,26 @@ export default async function Page({ params: paramsPromise }: Args) {
 }
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
+  const locale = await getLocale()
   const { slug = 'home' } = await paramsPromise
   // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug)
   const page = await queryPageBySlug({
     slug: decodedSlug,
+    locale,
   })
 
   return generateMeta({ doc: page })
 }
 
-const queryPageBySlug = cache(async ({ slug }: { slug: string }) => {
+const queryPageBySlug = cache(async ({ slug, locale }: { slug: string; locale: Awaited<ReturnType<typeof getLocale>> }) => {
   const { isEnabled: draft } = await draftMode()
 
-  const payload = await getPayload({ config: configPromise })
-
-  const result = await payload.find({
+  return findDocumentBySlug({
     collection: 'pages',
     draft,
-    limit: 1,
-    pagination: false,
+    locale,
     overrideAccess: draft,
-    where: {
-      slug: {
-        equals: slug,
-      },
-    },
+    slug,
   })
-
-  return result.docs?.[0] || null
 })

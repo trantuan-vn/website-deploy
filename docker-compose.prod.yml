@@ -8,6 +8,9 @@ services:
       - '3001:3000'
     env_file:
       - .env
+    environment:
+      # Inside compose, Mongo is reachable by service name — not 127.0.0.1 from .env
+      DATABASE_URL: mongodb://mongo:27017/website-deploy
     depends_on:
       - mongo
     volumes:
@@ -17,7 +20,8 @@ services:
       - media:/app/public/media
 
   mongo:
-    image: mongo:latest
+    image: mongo:7
+    platform: linux/amd64
     restart: unless-stopped
     command:
       - --storageEngine=wiredTiger

@@ -1,0 +1,22 @@
+# Dev server against compose mongo (live source mount)
+# Run: docker compose -f docker-compose.prod.yml -f docker-compose.dev.yml up payload-dev
+services:
+  payload-dev:
+    image: node:24-alpine
+    working_dir: /app
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: mongodb://mongo:27017/website-deploy
+      NEXT_PUBLIC_SERVER_URL: http://localhost:3000
+    # Production build dev server avoids Turbopack RSC bug (enqueueModel) in Payload admin.
+    # Slower first start (~1–2 min) but admin login/dashboard work reliably.
+    command: sh -c "corepack enable pnpm && pnpm install && pnpm dev:admin"
+    depends_on:
+      - mongo

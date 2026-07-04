@@ -17,6 +17,7 @@ services:
 
   mongo:
     image: docker.io/library/mongo:7
+    platform: linux/amd64
     ports:
       - '27017:27017'
     volumes:

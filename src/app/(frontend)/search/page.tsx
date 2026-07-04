@@ -7,6 +7,7 @@ import React from 'react'
 import { Search } from '@/search/Component'
 import PageClient from './page.client'
 import { CardPostData } from '@/components/Card'
+import { getLocale } from '@/utilities/locale.server'
 
 type Args = {
   searchParams: Promise<{
@@ -14,6 +15,7 @@ type Args = {
   }>
 }
 export default async function Page({ searchParams: searchParamsPromise }: Args) {
+  const locale = await getLocale()
   const { q: query } = await searchParamsPromise
   const payload = await getPayload({ config: configPromise })
 
@@ -21,6 +23,7 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
     collection: 'search',
     depth: 1,
     limit: 12,
+    locale,
     select: {
       title: true,
       slug: true,

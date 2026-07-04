@@ -54,6 +54,11 @@ const nextConfig: NextConfig = {
       '.js': ['.ts', '.tsx', '.js', '.jsx'],
       '.mjs': ['.mts', '.mjs'],
     }
+    // Payload admin client components must not pull Node-only modules (pino → worker_threads).
+    webpackConfig.resolve.fallback = {
+      ...webpackConfig.resolve.fallback,
+      worker_threads: false,
+    }
 
     return webpackConfig
   },

@@ -9,6 +9,7 @@ import React from 'react'
 import PageClient from './page.client'
 import { notFound } from 'next/navigation'
 import { safeBuildStaticParams } from '@/utilities/safeBuildStaticParams'
+import { getLocale } from '@/utilities/locale.server'
 
 export const revalidate = 600
 
@@ -19,6 +20,7 @@ type Args = {
 }
 
 export default async function Page({ params: paramsPromise }: Args) {
+  const locale = await getLocale()
   const { pageNumber } = await paramsPromise
   const payload = await getPayload({ config: configPromise })
 
@@ -30,6 +32,7 @@ export default async function Page({ params: paramsPromise }: Args) {
     collection: 'posts',
     depth: 1,
     limit: 12,
+    locale,
     page: sanitizedPageNumber,
     overrideAccess: false,
   })

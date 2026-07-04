@@ -202,7 +202,7 @@ export const seed = async ({
 
   payload.logger.info(`— Seeding pages...`)
 
-  const [_, contactPage] = await Promise.all([
+  const [homePage, contactPage] = await Promise.all([
     payload.create({
       collection: 'pages',
       depth: 0,
@@ -212,6 +212,61 @@ export const seed = async ({
       collection: 'pages',
       depth: 0,
       data: contactPageData({ contactForm: contactForm }),
+    }),
+  ])
+
+  payload.logger.info(`— Seeding English page translations...`)
+
+  await Promise.all([
+    payload.update({
+      collection: 'pages',
+      id: homePage.id,
+      locale: 'en',
+      data: {
+        ...home({ heroImage: imageHomeDoc, metaImage: image2Doc }),
+        _status: 'published',
+      },
+    }),
+    payload.update({
+      collection: 'pages',
+      id: contactPage.id,
+      locale: 'en',
+      data: {
+        ...contactPageData({ contactForm: contactForm }),
+        _status: 'published',
+      },
+    }),
+  ])
+
+  payload.logger.info(`— Seeding English post translations...`)
+
+  await Promise.all([
+    payload.update({
+      collection: 'posts',
+      id: post1Doc.id,
+      locale: 'en',
+      data: {
+        ...post1({ heroImage: image1Doc, blockImage: image2Doc, author: demoAuthor }),
+        _status: 'published',
+      },
+    }),
+    payload.update({
+      collection: 'posts',
+      id: post2Doc.id,
+      locale: 'en',
+      data: {
+        ...post2({ heroImage: image2Doc, blockImage: image3Doc, author: demoAuthor }),
+        _status: 'published',
+      },
+    }),
+    payload.update({
+      collection: 'posts',
+      id: post3Doc.id,
+      locale: 'en',
+      data: {
+        ...post3({ heroImage: image3Doc, blockImage: image1Doc, author: demoAuthor }),
+        _status: 'published',
+      },
     }),
   ])
 
