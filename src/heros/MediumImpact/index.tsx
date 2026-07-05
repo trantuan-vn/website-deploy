@@ -28,8 +28,7 @@ export const MediumImpactHero: React.FC<HeroItem> = ({ links, media, richText })
         {media && typeof media === 'object' && (
           <div>
             <Media
-              className="-mx-4 md:-mx-8 2xl:-mx-16"
-              imgClassName=""
+              imgClassName="w-full h-auto border border-border rounded-[0.8rem]"
               priority
               resource={media}
             />
