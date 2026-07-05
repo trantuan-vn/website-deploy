@@ -1,7 +1,5 @@
 'use client'
 
-import { useHeaderTheme } from '@/providers/HeaderTheme'
-import { useTheme } from '@/providers/Theme'
 import Link from 'next/link'
 import { MapPin, Phone, Printer } from 'lucide-react'
 import React from 'react'
@@ -35,27 +33,15 @@ function ContactIcon({ type }: { type: ContactIconType }) {
 }
 
 export const FooterClient: React.FC<FooterClientProps> = ({ data }) => {
-  const { headerTheme } = useHeaderTheme()
-  const { theme: globalTheme } = useTheme()
-  const effectiveTheme = headerTheme ?? globalTheme ?? 'light'
-  const isDarkFooter = effectiveTheme === 'dark'
   const navItems = data?.navItems || []
   const contactColumns = data?.contactColumns || []
   const copyrightText = data?.copyrightText
   const hasContactInfo = contactColumns.length > 0 || Boolean(copyrightText)
 
-  const mutedTextClass = isDarkFooter ? 'text-white/80' : 'text-foreground/80'
-  const headingClass = isDarkFooter ? 'text-white' : 'text-foreground'
-
   return (
     <footer
-      className={cn(
-        'mt-auto border-t transition-colors',
-        isDarkFooter
-          ? 'border-white/10 bg-black/70 backdrop-blur-md text-white'
-          : 'border-border/50 bg-background/80 backdrop-blur-md',
-      )}
-      {...(headerTheme ? { 'data-theme': headerTheme } : {})}
+      className="mt-auto border-t border-white/10 bg-black/70 backdrop-blur-md text-white transition-colors"
+      data-theme="dark"
     >
       <div className="container py-8">
         <div className="relative flex items-center justify-between gap-4">
@@ -65,19 +51,9 @@ export const FooterClient: React.FC<FooterClientProps> = ({ data }) => {
 
           <MobileNavMenu
             items={navItems}
-            linkClassName={
-              isDarkFooter
-                ? 'text-white/90 hover:text-white hover:bg-white/10'
-                : 'text-foreground hover:text-foreground hover:bg-accent/60'
-            }
-            menuButtonClassName={
-              isDarkFooter ? 'text-white/80 hover:text-white' : 'text-foreground/80 hover:text-foreground'
-            }
-            menuPanelClassName={
-              isDarkFooter
-                ? 'border-white/15 bg-zinc-900 shadow-black/40'
-                : 'border-border/50 bg-background shadow-md'
-            }
+            linkClassName="text-white/90 hover:text-white hover:bg-white/10"
+            menuButtonClassName="text-white/80 hover:text-white"
+            menuPanelClassName="border-white/15 bg-zinc-900 shadow-black/40"
             variant="footer"
           />
 
@@ -87,12 +63,7 @@ export const FooterClient: React.FC<FooterClientProps> = ({ data }) => {
                 <CMSLink
                   key={i}
                   {...link}
-                  className={cn(
-                    'transition-colors',
-                    isDarkFooter
-                      ? 'text-white/80 hover:text-white'
-                      : 'text-foreground/80 hover:text-foreground',
-                  )}
+                  className="text-white/80 transition-colors hover:text-white"
                 />
               )
             })}
@@ -101,18 +72,8 @@ export const FooterClient: React.FC<FooterClientProps> = ({ data }) => {
       </div>
 
       {hasContactInfo && (
-        <div
-          className={cn(
-            'border-t',
-            isDarkFooter ? 'border-white/10' : 'border-border/50',
-          )}
-        >
-          <div
-            className={cn(
-              'container pt-8',
-              copyrightText ? 'pb-0' : 'pb-8',
-            )}
-          >
+        <div className="border-t border-white/10">
+          <div className={cn('container pt-8', copyrightText ? 'pb-0' : 'pb-8')}>
             {contactColumns.length > 0 && (
               <div
                 className={cn(
@@ -123,16 +84,14 @@ export const FooterClient: React.FC<FooterClientProps> = ({ data }) => {
                 {contactColumns.map((column, columnIndex) => (
                   <div key={column.id || columnIndex}>
                     {column.title && (
-                      <h3 className={cn('mb-4 text-base font-semibold', headingClass)}>
-                        {column.title}
-                      </h3>
+                      <h3 className="mb-4 text-base font-semibold text-white">{column.title}</h3>
                     )}
                     {column.items && column.items.length > 0 && (
                       <ul className="space-y-3">
                         {column.items.map((item, itemIndex) => (
                           <li
                             key={item.id || itemIndex}
-                            className={cn('flex gap-3 text-sm leading-relaxed', mutedTextClass)}
+                            className="flex gap-3 text-sm leading-relaxed text-white/80"
                           >
                             <ContactIcon type={item.icon} />
                             <span>{item.text}</span>
@@ -148,13 +107,11 @@ export const FooterClient: React.FC<FooterClientProps> = ({ data }) => {
             {copyrightText && (
               <div
                 className={cn(
-                  contactColumns.length > 0 && 'border-t pt-4 pb-4',
-                  contactColumns.length > 0 &&
-                    (isDarkFooter ? 'border-white/10' : 'border-border/50'),
+                  contactColumns.length > 0 && 'border-t border-white/10 pt-4 pb-4',
                   !contactColumns.length && 'pb-8',
                 )}
               >
-                <p className={cn('text-left text-sm', mutedTextClass)}>{copyrightText}</p>
+                <p className="text-left text-sm text-white/80">{copyrightText}</p>
               </div>
             )}
           </div>

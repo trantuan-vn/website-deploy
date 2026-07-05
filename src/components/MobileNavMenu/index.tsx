@@ -104,16 +104,15 @@ export const MobileNavMenu: React.FC<MobileNavMenuProps> = ({
         )}
         onClick={() => setOpen(open ? false : true)}
       >
-        {open ? (
-          <X aria-hidden className="h-5 w-5 text-primary" />
-        ) : (
-          <Menu aria-hidden className="h-5 w-5 text-primary" />
-        )}
+        {open ? <X aria-hidden className="h-5 w-5" /> : <Menu aria-hidden className="h-5 w-5" />}
       </button>
 
       {open && (
         <nav
-          className="absolute right-0 top-full z-50 mt-2 min-w-[12rem] rounded-md border border-border/50 bg-background py-2 shadow-lg"
+          className={cn(
+            'absolute right-0 top-full z-50 mt-2 min-w-[12rem] rounded-md border py-2 shadow-lg',
+            menuPanelClassName ?? 'border-border/50 bg-background',
+          )}
           id={menuId}
         >
           {navLinks}
