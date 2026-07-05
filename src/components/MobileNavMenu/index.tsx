@@ -14,6 +14,7 @@ interface MobileNavMenuProps {
   items: NavItem[]
   linkClassName?: string
   menuButtonClassName?: string
+  menuPanelClassName?: string
   variant?: 'header' | 'footer'
 }
 
@@ -21,6 +22,7 @@ export const MobileNavMenu: React.FC<MobileNavMenuProps> = ({
   items,
   linkClassName,
   menuButtonClassName,
+  menuPanelClassName,
   variant = 'header',
 }) => {
   const [open, setOpen] = useState(false)
@@ -50,7 +52,7 @@ export const MobileNavMenu: React.FC<MobileNavMenuProps> = ({
         className={cn(
           variant === 'header'
             ? 'block px-4 py-2 text-sm font-medium no-underline transition-colors'
-            : 'block py-1 text-sm transition-colors',
+            : 'block rounded-md px-4 py-2.5 text-sm font-medium no-underline transition-colors',
           linkClassName,
         )}
       />
@@ -66,18 +68,20 @@ export const MobileNavMenu: React.FC<MobileNavMenuProps> = ({
           aria-expanded={open}
           aria-label={open ? 'Đóng menu' : 'Mở menu'}
           className={cn(
-            'flex items-center gap-2 text-sm font-medium transition-colors',
+            'flex h-9 w-9 items-center justify-center rounded-md transition-colors hover:bg-accent/50',
             menuButtonClassName,
           )}
           onClick={() => setOpen(open ? false : true)}
         >
           {open ? <X aria-hidden className="h-5 w-5" /> : <Menu aria-hidden className="h-5 w-5" />}
-          <span>Menu</span>
         </button>
 
         {open && (
           <nav
-            className="absolute inset-x-0 top-full z-10 mt-4 flex flex-col gap-2 border-t border-border/50 pt-4"
+            className={cn(
+              'absolute inset-x-0 top-full z-50 mt-2 flex flex-col gap-0.5 rounded-md border py-2 shadow-lg',
+              menuPanelClassName ?? 'border-border/50 bg-background',
+            )}
             id={menuId}
           >
             {navLinks}

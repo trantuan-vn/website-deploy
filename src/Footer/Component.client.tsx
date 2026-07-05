@@ -67,11 +67,16 @@ export const FooterClient: React.FC<FooterClientProps> = ({ data }) => {
             items={navItems}
             linkClassName={
               isDarkFooter
-                ? 'text-white/80 hover:text-white'
-                : 'text-foreground/80 hover:text-foreground'
+                ? 'text-white/90 hover:text-white hover:bg-white/10'
+                : 'text-foreground hover:text-foreground hover:bg-accent/60'
             }
             menuButtonClassName={
               isDarkFooter ? 'text-white/80 hover:text-white' : 'text-foreground/80 hover:text-foreground'
+            }
+            menuPanelClassName={
+              isDarkFooter
+                ? 'border-white/15 bg-zinc-900 shadow-black/40'
+                : 'border-border/50 bg-background shadow-md'
             }
             variant="footer"
           />
