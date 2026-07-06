@@ -1,5 +1,8 @@
 # Tắt
 oci ce node-pool update --node-pool-id <id> --size 0
+oci lb load-balancer delete --load-balancer-id <lb_id> --force
 
 # Bật lại
 oci ce node-pool update --node-pool-id <id> --size 1
+./scripts/deploy-oke.sh
+sửa lại dns record theo public ip
